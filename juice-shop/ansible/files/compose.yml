@@ -1,0 +1,8 @@
+services:
+  juice-shop:
+    image: bkimminich/juice-shop
+    container_name: juice-shop
+    ports:
+      - "443:3000"
+    restart: unless-stopped
+

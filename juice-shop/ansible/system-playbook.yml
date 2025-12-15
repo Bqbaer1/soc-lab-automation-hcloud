@@ -1,0 +1,31 @@
+---
+- name: DVWA host Deployment
+  hosts: infoseclab
+  become: true
+
+  vars:
+    docker_install_compose: true
+    docker_compose_version: "v2.29.2"
+    docker_install_compose_plugin: true
+
+  roles:
+    - geerlingguy.docker
+
+  tasks:
+    - name: Benutzer dvwa erstellen
+      ansible.builtin.user:
+        name: dvwa
+        groups: docker 
+        shell: /bin/bash
+        state: present
+
+    - name: Ordner für dvwa anlegen
+      ansible.builtin.file:
+        path: /opt/dvwa
+        state: directory
+        owner: dvwa
+        group: dvwa
+        mode: "0755"
+
+
+

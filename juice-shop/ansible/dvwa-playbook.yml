@@ -1,0 +1,32 @@
+---
+- name: DVWA Deployment
+  hosts: infoseclab
+  become: true
+
+  vars:
+    dvwa_base_dir: /opt/dvwa
+    dvwa_data_dir: /opt/dvwa/data
+    dvwa_hostname: "<url> "   
+
+  tasks:
+    - name: Verzeichnisstruktur anlegen
+      ansible.builtin.file:
+        path: "{{ dvwa_data_dir }}"
+        state: directory
+        owner: dvwa
+        group: dvwa
+        mode: "0755"
+
+    - name: compose.yml hochladen
+      ansible.builtin.copy:
+        src: ../files/compose.yml
+        dest: "{{ dvwa_base_dir }}/compose.yml"
+        owner: dvwa
+        group: dvwa
+        mode: "0644"
+
+    - name: Docker Compose starten
+      ansible.builtin.command:
+        cmd: docker compose up -d
+        chdir: "{{ dvwa_base_dir }}"
+
